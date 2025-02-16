@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import useAuthStore from "../store/authStore";
+import { Check, Clock } from "lucide-react";
 
 const Container = styled.div`
   background: #1a1b1e;
@@ -103,11 +104,7 @@ const calculateDayProfits = (initialBalance) => {
   };
 };
 
-const generateWeeklyData = (
-  weeklyCapital,
-  signalsStatus,
-  lastDayDate = null
-) => {
+const generateWeeklyData = (weeklyCapital, lastDayDate = null) => {
   const days = [
     "Sunday",
     "Monday",
@@ -122,7 +119,9 @@ const generateWeeklyData = (
     ? new Date(new Date(lastDayDate).getTime() + 24 * 60 * 60 * 1000)
     : new Date();
 
-  const currentDay = new Date().getDay();
+  const currentDate = new Date();
+  const currentDay = currentDate.getDay();
+  const currentHour = currentDate.getHours();
 
   const sundayDate = new Date(startDate);
   sundayDate.setDate(startDate.getDate() - currentDay);
@@ -140,7 +139,21 @@ const generateWeeklyData = (
     if (i < currentDay) {
       status = "completed";
     } else if (i === currentDay) {
-      status = signalsStatus;
+      // here if today
+      // For current day, determine status based on signals
+      if (currentHour < 10) {
+        // Before first signal
+        status = "not-started";
+      } else if (currentHour < 14) {
+        // Between first and second signal
+        status = "awaiting-next-signal";
+      } else if (currentHour < 18) {
+        // During second signal
+        status = "in-progress";
+      } else {
+        // After both signals
+        status = "done";
+      }
     } else {
       status = "pending";
     }
@@ -206,12 +219,52 @@ const formatCurrency = (amount, currency = "USD") => {
   return `$${amount.toFixed(2)}`;
 };
 
+const StatusBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 5px 9px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  min-width: 90px;
+  /* font-weight: 500; */
+  background-color: ${(props) => {
+    switch (props.status) {
+      case "pending":
+        return "#374151";
+      case "not-started":
+        return "#FEE2E2";
+      case "in-progress":
+        return "#DBEAFE";
+      case "awaiting-next-signal":
+        return "#FEF3C7";
+      case "done":
+        return "#91b8a4";
+      default:
+        return "#374151";
+    }
+  }};
+  color: ${(props) => {
+    switch (props.status) {
+      case "pending":
+        return "#9CA3AF";
+      case "not-started":
+        return "#DC2626";
+      case "in-progress":
+        return "#2563EB";
+      case "awaiting-next-signal":
+        return "#D97706";
+      case "done":
+        return "#083426";
+      default:
+        return "#9CA3AF";
+    }
+  }};
+`;
+
 const DailySignals = () => {
   const { user } = useAuthStore();
-  const signalsData = generateWeeklyData(
-    user.weekly_capital,
-    "awaiting outcome"
-  );
+  const signalsData = generateWeeklyData(user.weekly_capital);
 
   const [currency, setCurrency] = useState("USD");
 
@@ -299,10 +352,17 @@ const DailySignals = () => {
                 </Td>
 
                 <Td>{formatCurrency(signal.finalCapital, currency)}</Td>
+
                 <Td>
-                  <StatusText status={signal.status}>
-                    {signal.status}
-                  </StatusText>
+                  <StatusBadge status={signal.status}>
+                    {getStatusIcon(signal.status)}
+                    {signal.status
+                      ?.split("-")
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                      )
+                      .join(" ")}
+                  </StatusBadge>
                 </Td>
               </TableRow>
             ))}
@@ -311,6 +371,23 @@ const DailySignals = () => {
       </TableWrapper>
     </Container>
   );
+};
+
+const getStatusIcon = (status) => {
+  switch (status) {
+    case "not-started":
+      return <Clock size={16} />;
+    case "in-progress":
+      return <Hourglass size={16} />;
+    case "awaiting-next-signal":
+      return <Clock size={16} />;
+    case "done":
+      return <Check size={16} />;
+    case "pending":
+      return <Clock size={16} />;
+    default:
+      return <Clock size={16} />;
+  }
 };
 
 export default DailySignals;

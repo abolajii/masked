@@ -51,7 +51,7 @@ const Card = styled.div`
   transition: all 0.3s ease;
   overflow: hidden;
   border-left: 5px solid ${(props) => getStatusColor(props.status)};
-  padding: 1.2rem;
+  padding: 1rem;
 `;
 const CardHeader = styled.div`
   font-size: 1rem;
@@ -63,6 +63,7 @@ const CardContent = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 3px;
 `;
 const Time = styled.span`
   font-size: 0.875rem;
@@ -73,7 +74,6 @@ const StatusGroup = styled.div`
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  font-weight: 500;
   color: ${(props) => getStatusColor(props.status)};
 `;
 

@@ -6,7 +6,6 @@ const Container = styled.div`
   background: #1a1b1e;
   border-radius: 12px;
   color: #ffffff;
-  padding: 1.5rem;
 `;
 
 const Header = styled.div`

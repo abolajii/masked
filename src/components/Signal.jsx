@@ -157,7 +157,7 @@ const SignalWidget = () => {
         let newStatus = signal.status;
         if (currentTime >= signalStart && currentTime <= signalEnd) {
           newStatus = "in-progress";
-        } else if (currentTime > signalEnd) {
+        } else if (currentTime >= signalEnd) {
           newStatus = "completed";
           // Here you would typically make an API call to update the traded status
           updateCapitalForSignal(signal);

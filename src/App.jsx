@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { getMe } from "./api/request";
 import { useEffect } from "react";
 import MainLayout from "./layouts/MainLayout";
+import Register from "./pages/Register";
 
 const App = () => {
   useEffect(() => {
@@ -37,6 +38,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/dashboard"
           element={

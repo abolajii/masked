@@ -13,3 +13,31 @@ export const getMe = async () => {
 export const updateRecentCapital = (recentCapital) => {
   return authSignal.put("/recent-capital", { recentCapital });
 };
+
+export const addDeposit = async (data) => {
+  console.log(data);
+  try {
+    const response = await authSignal.post("/add/deposit", data);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const getAllDeposits = async () => {
+  try {
+    const response = await authSignal.get("/deposits");
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const deleteDeposit = async (id) => {
+  try {
+    const response = await authSignal.delete(`/delete/deposit/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};

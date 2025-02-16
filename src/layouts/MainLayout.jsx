@@ -2,12 +2,13 @@
 import styled from "styled-components";
 import {
   Home,
-  Settings,
+  DollarSign,
   Calendar,
   Mail,
   Users,
   HelpCircle,
   LogOut,
+  User,
 } from "lucide-react";
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -154,6 +155,9 @@ const MainLayout = ({ children }) => {
   const navigationItems = [
     { Icon: Home, label: "Dashboard", path: "/dashboard" },
     { Icon: Calendar, label: "Calendar", path: "/weekly" },
+    { Icon: DollarSign, label: "Deposit", path: "/deposit" },
+    { Icon: User, label: "Profile", path: "/profile" },
+    // { Icon: HelpCircle, label: "Help", path: "/help" },
   ];
 
   return (

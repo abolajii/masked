@@ -13,6 +13,8 @@ import { getMe } from "./api/request";
 import { useEffect } from "react";
 import MainLayout from "./layouts/MainLayout";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import Deposit from "./pages/Deposit";
 
 const App = () => {
   useEffect(() => {
@@ -23,7 +25,7 @@ const App = () => {
         // This should be done in a Redux store or similar
         // for better state management
         const response = await getMe();
-        console.log(response);
+        // console.log(response);
       } else {
         // Clear the auth state
         // This should be done in a Redux store or similar
@@ -55,6 +57,26 @@ const App = () => {
             <ProtectedRoute>
               <MainLayout>
                 <Weekly />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <Profile />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/deposit"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <Deposit />
               </MainLayout>
             </ProtectedRoute>
           }

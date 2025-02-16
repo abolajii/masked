@@ -53,7 +53,7 @@ const Card = styled.div`
   padding: 1rem;
 `;
 const CardHeader = styled.div`
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #f9fafb;
 `;

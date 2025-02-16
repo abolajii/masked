@@ -24,7 +24,7 @@ const StatsGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
-  margin-top: 1.5rem;
+  /* margin-top: 1.5rem; */
 
   @media (max-width: 767px) {
     grid-template-columns: 1fr;
@@ -98,6 +98,36 @@ const VisibilityButton = styled.button`
   }
 `;
 
+const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #2d2d2d;
+  margin-bottom: 10px;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #3d3d3d;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+  }
+`;
+
 const formatValue = (value, currency, nairaRate = 1700) => {
   const options = {
     minimumFractionDigits: 2,
@@ -114,11 +144,30 @@ const Dashboard = () => {
   const [isHidden, setIsHidden] = useState(true);
   const [currency, setCurrency] = useState("USD");
   const [stats, setStats] = useState(null);
+  const NAIRA_RATE = 1700;
 
   const toggleVisibility = () => setIsHidden(!isHidden);
 
   const hideValue = (value) => {
     return isHidden ? "••••••" : value;
+  };
+
+  const convertCurrency = (amount) => {
+    const formattedAmount = amount?.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+
+    return currency === "NGN"
+      ? (amount * NAIRA_RATE).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      : formattedAmount;
+  };
+
+  const toggleCurrency = () => {
+    setCurrency((prev) => (prev === "USD" ? "NGN" : "USD"));
   };
 
   React.useEffect(() => {
@@ -147,7 +196,9 @@ const Dashboard = () => {
         </VisibilityButton>
       </WelcomeHeader>
       <SignalWidget />
-
+      <Button onClick={toggleCurrency}>
+        Switch to {currency === "USD" ? "₦" : "$"}
+      </Button>
       <StatsGrid>
         <StatCard>
           <StatIcon color="#4c6ef5">

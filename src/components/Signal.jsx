@@ -26,7 +26,9 @@ const getStatusColor = (status) => {
 };
 
 // Styled components remain the same...
-const Container = styled.div``;
+const Container = styled.div`
+  margin-bottom: 10px;
+`;
 const LoadingContainer = styled.div`
   color: #f59f00;
   font-size: 0.9rem;

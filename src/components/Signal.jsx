@@ -103,7 +103,7 @@ const defaultSignals = [
 ];
 
 const SignalWidget = () => {
-  const [signals, setSignals] = useState(defaultSignals);
+  const [signals, setSignals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -125,7 +125,7 @@ const SignalWidget = () => {
           id: signal._id,
           title: signal.title,
           traded: signal.traded,
-          status: signal.status || "not-started",
+          status: signal.status,
           capitalUpdated: false,
           time: defaultSignal ? defaultSignal.time : signal.time,
         };
@@ -159,6 +159,8 @@ const SignalWidget = () => {
           newStatus = "in-progress";
         } else if (currentTime >= signalEnd) {
           newStatus = "completed";
+          console.log(signal);
+
           // Here you would typically make an API call to update the traded status
           updateCapitalForSignal(signal);
         }
@@ -180,7 +182,8 @@ const SignalWidget = () => {
 
   const updateCapitalForSignal = async (signal) => {
     try {
-      if (!signal.traded) await updateRecentCapital();
+      if (!signal.traded && signal.status !== "completed")
+        await updateRecentCapital();
       setSignals((prevSignals) =>
         prevSignals.map((s) =>
           s.id === signal.id ? { ...s, capitalUpdated: true } : s

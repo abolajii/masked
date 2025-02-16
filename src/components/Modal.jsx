@@ -25,7 +25,7 @@ const ModalContent = styled.div`
   color: #e0e0e0;
   position: relative;
   top: 0px;
-  height: 400px;
+  height: 500px;
   margin-top: 40px;
 `;
 

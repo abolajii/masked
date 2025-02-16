@@ -7,7 +7,7 @@ import { getSignalForTheDay, updateRecentCapital } from "../api/request";
 // Global styles for dark mode
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: #1a1a2e;
+    background-color: #25262b;
     color: #fff;
   }
 `;
@@ -44,13 +44,14 @@ const WidgetGrid = styled.div`
   gap: 1rem;
 `;
 const Card = styled.div`
-  background: #222240;
+  background: #25262b;
+
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   overflow: hidden;
   border-left: 5px solid ${(props) => getStatusColor(props.status)};
-  padding: 1rem;
+  padding: 1.2rem;
 `;
 const CardHeader = styled.div`
   font-size: 1rem;

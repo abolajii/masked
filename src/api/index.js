@@ -2,7 +2,7 @@ import axios from "axios";
 const prod = true;
 
 const BASE_URL = prod
-  ? "https://masked-be.vercel.app/"
+  ? "https://masked-be.vercel.app/api/v1"
   : "http://localhost:4030/api/v1";
 
 const getToken = () => {

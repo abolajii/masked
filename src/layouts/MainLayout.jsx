@@ -8,7 +8,8 @@ import {
   Users,
   HelpCircle,
 } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const LayoutWrapper = styled.div`
   display: flex;
@@ -43,6 +44,7 @@ const MobileNavigation = styled.nav`
   height: 64px;
   background-color: #1a1a1a;
   display: flex;
+  z-index: 10;
 
   @media (min-width: 1024px) {
     display: none;
@@ -88,9 +90,12 @@ const IconWrapper = styled.button`
 const MainContent = styled.main`
   flex: 1;
   padding: 1rem;
+  padding-bottom: 80px; // Add padding to prevent content from being hidden behind mobile nav
+  background: #1a1b1e;
 
   @media (min-width: 1024px) {
     margin-left: 64px;
+    padding-bottom: 1rem;
   }
 `;
 
@@ -101,27 +106,28 @@ const SidebarIcon = ({ Icon, isActive, onClick }) => (
 );
 
 const MainLayout = ({ children }) => {
-  const [activeIcon, setActiveIcon] = useState("Home");
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const icons = [
-    { Icon: Home, label: "Home" },
-    { Icon: Mail, label: "Mail" },
-    { Icon: Calendar, label: "Calendar" },
-    { Icon: Users, label: "Users" },
-    { Icon: Settings, label: "Settings" },
-    { Icon: HelpCircle, label: "Help" },
+  const navigationItems = [
+    { Icon: Home, label: "Dashboard", path: "/dashboard" },
+    { Icon: Calendar, label: "Calendar", path: "/weekly" },
+    // { Icon: Mail, label: "Messages", path: "/weekly" },
+    // { Icon: Users, label: "Users", path: "/users" },
+    // { Icon: Settings, label: "Settings", path: "/settings" },
+    // { Icon: HelpCircle, label: "Help", path: "/help" },
   ];
 
   return (
     <LayoutWrapper>
       <Sidebar>
         <NavContainer>
-          {icons.map(({ Icon, label }) => (
+          {navigationItems.map(({ Icon, label, path }) => (
             <SidebarIcon
-              key={label}
+              key={path}
               Icon={Icon}
-              isActive={activeIcon === label}
-              onClick={() => setActiveIcon(label)}
+              isActive={location.pathname === path}
+              onClick={() => navigate(path)}
             />
           ))}
         </NavContainer>
@@ -131,12 +137,12 @@ const MainLayout = ({ children }) => {
 
       <MobileNavigation>
         <NavContainer>
-          {icons.map(({ Icon, label }) => (
+          {navigationItems.map(({ Icon, label, path }) => (
             <SidebarIcon
-              key={label}
+              key={path}
               Icon={Icon}
-              isActive={activeIcon === label}
-              onClick={() => setActiveIcon(label)}
+              isActive={location.pathname === path}
+              onClick={() => navigate(path)}
             />
           ))}
         </NavContainer>

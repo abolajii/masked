@@ -53,7 +53,9 @@ const App = () => {
           path="/weekly"
           element={
             <ProtectedRoute>
-              <Weekly />
+              <MainLayout>
+                <Weekly />
+              </MainLayout>
             </ProtectedRoute>
           }
         />

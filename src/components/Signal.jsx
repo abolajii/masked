@@ -25,12 +25,10 @@ const getStatusColor = (status) => {
   }
 };
 
-const Container = styled.div`
-  padding: 1rem;
-`;
+const Container = styled.div``;
 
 const LoadingContainer = styled.div`
-  color: #3b82f6;
+  color: #f59f00;
   font-size: 0.9rem;
   font-weight: 500;
 `;
@@ -205,7 +203,7 @@ const SignalWidget = () => {
   if (loading) {
     return (
       <LoadingContainer>
-        <Hourglass size={24} className="animate-spin" />
+        <Hourglass size={24} className="animate-spin" color="#f59f00" />
         &nbsp; Loading signals...
       </LoadingContainer>
     );

@@ -186,14 +186,14 @@ const DepositHistory = () => {
     setIsCloseModalOpen(false);
   };
 
-  // if (deposits.length === 0) {
-  //   return (
-  //     <TableContainer>
-  //       <Title>Deposit History</Title>
-  //       <NoData>No deposits found</NoData>
-  //     </TableContainer>
-  //   );
-  // }
+  if (deposits.length === 0) {
+    return (
+      <TableContainer>
+        <Title>Deposit History</Title>
+        <NoData>No deposits found</NoData>
+      </TableContainer>
+    );
+  }
 
   return (
     <TableContainer>

@@ -15,8 +15,10 @@ import MainLayout from "./layouts/MainLayout";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Deposit from "./pages/Deposit";
+import useAuthStore from "./store/authStore";
 
 const App = () => {
+  const { setUser } = useAuthStore();
   useEffect(() => {
     const getCuurent = async () => {
       const token = localStorage.getItem("token");
@@ -25,7 +27,8 @@ const App = () => {
         // This should be done in a Redux store or similar
         // for better state management
         const response = await getMe();
-        // console.log(response);
+        console.log(response.user);
+        setUser(response.user);
       } else {
         // Clear the auth state
         // This should be done in a Redux store or similar

@@ -19,10 +19,14 @@ import useAuthStore from "./store/authStore";
 
 const App = () => {
   const { setUser } = useAuthStore();
+
+  const getToken = () => {
+    return localStorage.getItem("token");
+  };
+
   useEffect(() => {
     const getCuurent = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
+      if (getToken()) {
         // Update the auth state
         // This should be done in a Redux store or similar
         // for better state management

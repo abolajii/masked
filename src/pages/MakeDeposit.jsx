@@ -136,10 +136,10 @@ const MakeDeposit = ({ handleCloseModal, isModalOpen, fetchDeposits }) => {
     try {
       //   await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate API call
 
-      const response = await addDeposit(formData);
-      const startingCapital = response.data.startingCapital;
-      const updatedUser = { ...user, startingCapital };
-      setUser(updatedUser);
+      await addDeposit(formData);
+      // const startingCapital = response.data.running_capital;
+      // const updatedUser = { ...user, startingCapital };
+      // setUser(updatedUser);
 
       setFormData({
         amount: "",

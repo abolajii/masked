@@ -103,7 +103,7 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1rem;
   background-color: #2d2d2d;
   margin-bottom: 10px;
   color: white;
@@ -112,6 +112,7 @@ const Button = styled.button`
   cursor: pointer;
   transition: background-color 0.2s;
   white-space: nowrap;
+  font-size: 15px;
 
   &:hover {
     background-color: #3d3d3d;
@@ -126,6 +127,13 @@ const Button = styled.button`
     font-size: 0.875rem;
     padding: 0.5rem;
   }
+`;
+
+const Flex = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1rem;
 `;
 
 const formatValue = (value, currency, nairaRate = 1700) => {
@@ -144,26 +152,14 @@ const Dashboard = () => {
   const [isHidden, setIsHidden] = useState(true);
   const [currency, setCurrency] = useState("USD");
   const [stats, setStats] = useState(null);
-  const NAIRA_RATE = 1700;
+  const [loading, setLoading] = useState(true);
+
+  // const NAIRA_RATE = 1700;
 
   const toggleVisibility = () => setIsHidden(!isHidden);
 
   const hideValue = (value) => {
     return isHidden ? "••••••" : value;
-  };
-
-  const convertCurrency = (amount) => {
-    const formattedAmount = amount?.toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-
-    return currency === "NGN"
-      ? (amount * NAIRA_RATE).toLocaleString("en-US", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })
-      : formattedAmount;
   };
 
   const toggleCurrency = () => {
@@ -195,10 +191,14 @@ const Dashboard = () => {
           )}
         </VisibilityButton>
       </WelcomeHeader>
-      <SignalWidget />
-      <Button onClick={toggleCurrency}>
-        Switch to {currency === "USD" ? "₦" : "$"}
-      </Button>
+      <Flex>
+        <SignalWidget loading={loading} setLoading={setLoading} />
+        {!loading && (
+          <Button onClick={toggleCurrency}>
+            Switch to {currency === "USD" ? "₦" : "$"}
+          </Button>
+        )}
+      </Flex>
       <StatsGrid>
         <StatCard>
           <StatIcon color="#4c6ef5">

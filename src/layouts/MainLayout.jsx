@@ -7,6 +7,7 @@ import {
   Mail,
   Users,
   HelpCircle,
+  LogOut,
 } from "lucide-react";
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -90,12 +91,47 @@ const IconWrapper = styled.button`
 const MainContent = styled.main`
   flex: 1;
   padding: 1rem;
-  padding-bottom: 80px; // Add padding to prevent content from being hidden behind mobile nav
+  padding-bottom: 80px;
   background: #1a1b1e;
+  color: #ffffff;
 
   @media (min-width: 1024px) {
     margin-left: 64px;
     padding-bottom: 1rem;
+  }
+`;
+
+const LogoutContainer = styled.div`
+  margin-top: auto;
+  padding: 0 0.5rem;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 1023px) {
+    display: none;
+  }
+`;
+
+const LogoutButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 2px solid #ff6b6b;
+  background: transparent;
+  color: #ff6b6b;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: rgba(255, 152, 0, 0.1);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 `;
 
@@ -109,13 +145,15 @@ const MainLayout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const handleLogout = () => {
+    // Add your logout logic here
+    localStorage.removeItem("token"); // If you're using token-based auth
+    navigate("/login");
+  };
+
   const navigationItems = [
     { Icon: Home, label: "Dashboard", path: "/dashboard" },
     { Icon: Calendar, label: "Calendar", path: "/weekly" },
-    // { Icon: Mail, label: "Messages", path: "/weekly" },
-    // { Icon: Users, label: "Users", path: "/users" },
-    // { Icon: Settings, label: "Settings", path: "/settings" },
-    // { Icon: HelpCircle, label: "Help", path: "/help" },
   ];
 
   return (
@@ -131,6 +169,11 @@ const MainLayout = ({ children }) => {
             />
           ))}
         </NavContainer>
+        <LogoutContainer>
+          <LogoutButton onClick={handleLogout}>
+            <LogOut size={24} />
+          </LogoutButton>
+        </LogoutContainer>
       </Sidebar>
 
       <MainContent>{children}</MainContent>
@@ -145,6 +188,7 @@ const MainLayout = ({ children }) => {
               onClick={() => navigate(path)}
             />
           ))}
+          <SidebarIcon Icon={LogOut} isActive={false} onClick={handleLogout} />
         </NavContainer>
       </MobileNavigation>
     </LayoutWrapper>

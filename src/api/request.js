@@ -41,3 +41,12 @@ export const deleteDeposit = async (id) => {
     throw error.response.data;
   }
 };
+
+export const getSignalForTheDay = async () => {
+  try {
+    const response = await authSignal.get("/signal");
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};

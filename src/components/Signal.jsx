@@ -139,6 +139,7 @@ const ThemeToggle = styled.button`
 
 const SignalWidget = ({ onUpdateCapital }) => {
   const [isDarkMode, setIsDarkMode] = useState(true);
+
   const [signals, setSignals] = useState([
     {
       title: "Signal 1",
@@ -162,57 +163,17 @@ const SignalWidget = ({ onUpdateCapital }) => {
     },
   ]);
 
+  const getSignalForTheDay = async () => {};
+
   const updateSignalStatus = async () => {
     const now = new Date();
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
-
-    setSignals((prevSignals) =>
-      prevSignals.map((signal) => {
-        // Calculate minutes until signal end
-        const minutesUntilEnd =
-          (signal.endHour - currentHour) * 60 +
-          (signal.endMinute - currentMinute);
-
-        // Check if we're in the signal period
-        const isInProgress =
-          currentHour === signal.startHour &&
-          currentMinute >= 0 &&
-          currentMinute < signal.endMinute;
-
-        // Check if signal is completed
-        const isCompleted =
-          currentHour > signal.endHour ||
-          (currentHour === signal.endHour && currentMinute >= signal.endMinute);
-
-        // Check if we're 20 minutes before end and haven't updated capital yet
-        if (minutesUntilEnd === 30 && !signal.capitalUpdated && isInProgress) {
-          if (onUpdateCapital) {
-            alert("Capital Updating...");
-            onUpdateCapital();
-          }
-          return {
-            ...signal,
-            status: "in-progress",
-            capitalUpdated: true,
-          };
-        }
-
-        if (isInProgress) {
-          return { ...signal, status: "in-progress" };
-        } else if (isCompleted) {
-          return {
-            ...signal,
-            status: "completed",
-            traded: true,
-            capitalUpdated: true,
-          };
-        }
-
-        return signal;
-      })
-    );
   };
+
+  React.useEffect(() => {
+    getSignalForTheDay();
+  }, []);
 
   useEffect(() => {
     updateSignalStatus();

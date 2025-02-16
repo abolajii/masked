@@ -31,7 +31,7 @@ const App = () => {
         // This should be done in a Redux store or similar
         // for better state management
         const response = await getMe();
-        console.log(response.user);
+        // console.log(response.user);
         setUser(response.user);
       } else {
         // Clear the auth state

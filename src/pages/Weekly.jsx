@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { generateWeeklyDetails } from "../utils";
 import useAuthStore from "../store/authStore";
+import { getAllDeposits } from "../api/request";
 
 const Container = styled.div`
   /* min-height: 100vh; */
@@ -231,10 +232,22 @@ const Weekly = () => {
   const [currency, setCurrency] = useState("USD");
   const NAIRA_RATE = 1656;
 
-  console.log(user);
+  const [deposits, setDeposits] = useState([]);
+
+  const fetchDeposits = async () => {
+    const response = await getAllDeposits();
+    // console.log(response);
+    setDeposits(response.deposits);
+  };
+
+  useEffect(() => {
+    fetchDeposits();
+  }, []);
+
+  // console.log(deposits);
 
   const convertCurrency = (amount) => {
-    const formattedAmount = amount.toLocaleString("en-US", {
+    const formattedAmount = amount?.toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
@@ -252,11 +265,11 @@ const Weekly = () => {
   };
   useEffect(() => {
     const initialWeekDetails = generateWeeklyDetails(
-      startingCapital,
-      343.4483,
-      6.87,
-      "2025-02-04",
-      "completed"
+      startingCapital
+      // 8.1089,
+      // 0,
+      // "2025-02-16",
+      // "completed"
     );
     setWeeklyDetailsHistory([initialWeekDetails]);
   }, []);

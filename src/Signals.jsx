@@ -116,14 +116,14 @@ const Signals = () => {
   const [signals, setSignals] = useState([
     {
       id: 1,
-      name: "Signal 1",
+      title: "Signal 1",
       time: "14:00 - 14:30",
       traded: false,
       status: "not-started",
     },
     {
       id: 2,
-      name: "Signal 2",
+      title: "Signal 2",
       time: "19:00 - 19:30",
       traded: false,
       status: "not-started",

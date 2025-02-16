@@ -131,12 +131,7 @@ const Dashboard = () => {
           )}
         </VisibilityButton>
       </WelcomeHeader>
-
-      <SignalWidget
-        onUpdateCapital={() => {
-          console.log("Updating capital...");
-        }}
-      />
+      <SignalWidget />
 
       <StatsGrid>
         <StatCard>

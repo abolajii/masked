@@ -1,228 +1,242 @@
 import React, { useState, useEffect } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import { Check, Clock, Hourglass, Sun, Moon } from "lucide-react";
+import styled, { createGlobalStyle } from "styled-components";
+import { DateTime } from "luxon";
+import { Check, Clock, Hourglass } from "lucide-react";
+import { getSignalForTheDay, updateRecentCapital } from "../api/request";
 
-const themes = {
-  light: {
-    background: "#f8f9fa",
-    cardBackground: "#ffffff",
-    text: "#1a1a1a",
-    subtext: "#4b5563",
-    statuses: {
-      "not-started": {
-        background: "#f3f4f6",
-        color: "#4b5563",
-      },
-      "in-progress": {
-        background: "#dbeafe",
-        color: "#2563eb",
-      },
-      completed: {
-        background: "#dcfce7",
-        color: "#16a34a",
-      },
-    },
-  },
-  dark: {
-    background: "#1a1a1a",
-    cardBackground: "#2d2d2d",
-    text: "#ffffff",
-    subtext: "#a1a1aa",
-    statuses: {
-      "not-started": {
-        background: "#374151",
-        color: "#9ca3af",
-      },
-      "in-progress": {
-        background: "#1e3a8a",
-        color: "#60a5fa",
-      },
-      completed: {
-        background: "#064e3b",
-        color: "#34d399",
-      },
-    },
-  },
-};
-
-const AppContainer = styled.div`
-  /* background-color: ${(props) => props.theme.background}; */
-  transition: all 0.3s ease;
-  margin: 10px 0;
-`;
-
-const WidgetContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin: 0 auto;
-`;
-
-const Card = styled.div`
-  padding: 1.25rem;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  flex: 1;
-  min-width: 300px;
-  max-width: 400px;
-  background-color: ${(props) => props.theme.statuses[props.status].background};
-`;
-
-const CardContent = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-`;
-
-const TextContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-`;
-
-const Title = styled.h3`
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0;
-  color: ${(props) => props.theme.text};
-`;
-
-const Time = styled.p`
-  font-size: 0.875rem;
-  color: ${(props) => props.theme.subtext};
-  margin: 0;
-`;
-
-const StatusContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-`;
-
-const StatusText = styled.span`
-  font-size: 0.875rem;
-  text-transform: capitalize;
-  color: ${(props) => props.theme.statuses[props.status].color};
-  font-weight: 500;
-`;
-
-const IconWrapper = styled.div`
-  color: ${(props) => props.theme.statuses[props.status].color};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ThemeToggle = styled.button`
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  padding: 0.75rem;
-  border-radius: 50%;
-  border: none;
-  background-color: ${(props) => props.theme.cardBackground};
-  color: ${(props) => props.theme.text};
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+// Global styles for dark mode
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: #1a1a2e;
+    color: #fff;
   }
 `;
 
-const SignalWidget = ({ onUpdateCapital }) => {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+const getStatusColor = (status) => {
+  switch (status) {
+    case "not-started":
+      return "#9ca3af"; // Gray
+    case "in-progress":
+      return "#facc15"; // Yellow
+    case "completed":
+      return "#10b981"; // Green
+    default:
+      return "#9ca3af";
+  }
+};
 
-  const [signals, setSignals] = useState([
-    {
-      title: "Signal 1",
-      time: "14:00 - 14:30",
-      status: "not-started",
-      startHour: 14,
-      endHour: 14,
-      endMinute: 30,
-      traded: false,
-      capitalUpdated: false, // New flag to track if capital was updated early
-    },
-    {
-      title: "Signal 2",
-      time: "19:00 - 19:30",
-      status: "not-started",
-      startHour: 19,
-      endHour: 19,
-      endMinute: 30,
-      traded: false,
-      capitalUpdated: false,
-    },
-  ]);
+const Container = styled.div`
+  padding: 1rem;
+`;
 
-  const getSignalForTheDay = async () => {};
+const LoadingContainer = styled.div`
+  color: #3b82f6;
+  font-size: 0.9rem;
+  font-weight: 500;
+`;
 
-  const updateSignalStatus = async () => {
-    const now = new Date();
-    const currentHour = now.getHours();
-    const currentMinute = now.getMinutes();
-  };
+const ErrorContainer = styled.div`
+  color: #ef4444;
+  padding: 1rem;
+  text-align: center;
+  font-weight: 500;
+`;
 
-  React.useEffect(() => {
-    getSignalForTheDay();
-  }, []);
+const WidgetGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+`;
+
+const Card = styled.div`
+  background: #222240;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  border-left: 5px solid ${(props) => getStatusColor(props.status)};
+  padding: 1rem;
+`;
+
+const CardHeader = styled.div`
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #f9fafb;
+`;
+
+const CardContent = styled.div`
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Time = styled.span`
+  font-size: 0.875rem;
+  color: #9ca3af;
+`;
+
+const StatusGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: ${(props) => getStatusColor(props.status)};
+`;
+
+const defaultSignals = [
+  {
+    id: 1,
+    title: "Signal 1",
+    time: "14:00 - 14:30",
+    traded: false,
+    status: "not-started",
+    capitalUpdated: false,
+  },
+  {
+    id: 2,
+    title: "Signal 2",
+    time: "19:00 - 19:30",
+    traded: false,
+    status: "not-started",
+    capitalUpdated: false,
+  },
+];
+
+const SignalWidget = () => {
+  const [signals, setSignals] = useState(defaultSignals);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    updateSignalStatus();
-    // Check every minute
-    const interval = setInterval(updateSignalStatus, 60000);
-    return () => clearInterval(interval);
+    fetchSignals();
+    // const intervalId = setInterval(updateSignalStatuses, 60000);
+    // return () => clearInterval(intervalId);
   }, []);
 
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case "not-started":
-        return <Clock size={20} />;
-      case "in-progress":
-        return <Hourglass size={20} />;
-      case "completed":
-        return <Check size={20} />;
-      default:
-        return <Clock size={20} />;
+  const fetchSignals = async () => {
+    try {
+      setLoading(true);
+      const response = await getSignalForTheDay();
+      const fetchedSignal = response.signals.map((signal) => {
+        const defaultSignal = defaultSignals.find(
+          (ds) => ds.title === signal.title
+        );
+        return {
+          id: signal._id,
+          title: signal.title,
+          traded: signal.traded,
+          status: signal.status || "not-started",
+          capitalUpdated: false,
+          time: defaultSignal ? defaultSignal.time : signal.time,
+        };
+      });
+      setSignals(fetchedSignal);
+    } catch (err) {
+      setError("Failed to fetch signals");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    const checkSignalStatus = () => {
+      const currentTime = new Date();
+      const updatedSignals = signals.map((signal) => {
+        const [startTime, endTime] = signal.time.split(" - ");
+        const [startHour, startMin] = startTime.split(":");
+        const [endHour, endMin] = endTime.split(":");
+
+        const signalStart = new Date();
+        signalStart.setHours(parseInt(startHour), parseInt(startMin), 0);
+
+        const signalEnd = new Date();
+
+        signalEnd.setHours(parseInt(endHour), parseInt(endMin), 0);
+
+        let newStatus = signal.status;
+        if (currentTime >= signalStart && currentTime <= signalEnd) {
+          newStatus = "in-progress";
+        } else if (currentTime > signalEnd) {
+          newStatus = "completed";
+          // Here you would typically make an API call to update the traded status
+          updateCapitalForSignal(signal);
+        }
+
+        return {
+          ...signal,
+          status: newStatus,
+        };
+      });
+
+      setSignals(updatedSignals);
+    };
+
+    const interval = setInterval(checkSignalStatus, 60000); // Check every minute
+    checkSignalStatus(); // Initial check
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const updateCapitalForSignal = async (signal) => {
+    try {
+      if (!signal.traded) await updateRecentCapital();
+      setSignals((prevSignals) =>
+        prevSignals.map((s) =>
+          s.id === signal.id ? { ...s, capitalUpdated: true } : s
+        )
+      );
+    } catch (err) {
+      console.error("Failed to update capital:", err);
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    const icons = {
+      "not-started": <Clock size={20} />,
+      "in-progress": <Hourglass size={20} />,
+      completed: <Check size={20} />,
+    };
+    return icons[status] || icons["not-started"];
+  };
+
+  if (loading) {
+    return (
+      <LoadingContainer>
+        <Hourglass size={24} className="animate-spin" />
+        &nbsp; Loading signals...
+      </LoadingContainer>
+    );
+  }
+
+  if (error) {
+    return <ErrorContainer>{error}</ErrorContainer>;
+  }
+
   return (
-    <ThemeProvider theme={isDarkMode ? themes.dark : themes.light}>
-      <AppContainer>
-        <ThemeToggle onClick={() => setIsDarkMode(!isDarkMode)}>
-          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-        </ThemeToggle>
-        <WidgetContainer>
-          {signals.map((signal, index) => (
-            <Card key={index} status={signal.status}>
-              <CardContent>
-                <TextContainer>
-                  <Title>{signal.title}</Title>
+    <>
+      <GlobalStyle />
+      <Container>
+        <WidgetGrid>
+          {signals.map((signal) => {
+            return (
+              <Card key={signal.id} status={signal.status}>
+                <CardHeader>{signal.title}</CardHeader>
+                <CardContent>
                   <Time>{signal.time}</Time>
-                </TextContainer>
-                <StatusContainer>
-                  <StatusText status={signal.status}>
-                    {signal.status.replace("-", " ")}
-                  </StatusText>
-                  <IconWrapper status={signal.status}>
+                  <StatusGroup status={signal.status}>
                     {getStatusIcon(signal.status)}
-                  </IconWrapper>
-                </StatusContainer>
-              </CardContent>
-            </Card>
-          ))}
-        </WidgetContainer>
-      </AppContainer>
-    </ThemeProvider>
+                    {signal.status.replace("-", " ")}
+                  </StatusGroup>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </WidgetGrid>
+      </Container>
+    </>
   );
 };
 

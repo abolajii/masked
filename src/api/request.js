@@ -10,8 +10,8 @@ export const getMe = async () => {
   return response.data;
 };
 
-export const updateRecentCapital = (recentCapital) => {
-  return authSignal.put("/recent-capital", { recentCapital });
+export const updateRecentCapital = () => {
+  return authSignal.get("/update-capital");
 };
 
 export const addDeposit = async (data) => {

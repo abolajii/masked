@@ -15,37 +15,34 @@ const GlobalStyle = createGlobalStyle`
 const getStatusColor = (status) => {
   switch (status) {
     case "not-started":
-      return "#9ca3af"; // Gray
+      return "#9ca3af";
     case "in-progress":
-      return "#facc15"; // Yellow
+      return "#facc15";
     case "completed":
-      return "#10b981"; // Green
+      return "#10b981";
     default:
       return "#9ca3af";
   }
 };
 
+// Styled components remain the same...
 const Container = styled.div``;
-
 const LoadingContainer = styled.div`
   color: #f59f00;
   font-size: 0.9rem;
   font-weight: 500;
 `;
-
 const ErrorContainer = styled.div`
   color: #ef4444;
   padding: 1rem;
   text-align: center;
   font-weight: 500;
 `;
-
 const WidgetGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
 `;
-
 const Card = styled.div`
   background: #222240;
   border-radius: 12px;
@@ -55,25 +52,21 @@ const Card = styled.div`
   border-left: 5px solid ${(props) => getStatusColor(props.status)};
   padding: 1rem;
 `;
-
 const CardHeader = styled.div`
   font-size: 1.25rem;
   font-weight: 600;
   color: #f9fafb;
 `;
-
 const CardContent = styled.div`
   font-size: 0.95rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
-
 const Time = styled.span`
   font-size: 0.875rem;
   color: #9ca3af;
 `;
-
 const StatusGroup = styled.div`
   display: flex;
   align-items: center;
@@ -83,54 +76,26 @@ const StatusGroup = styled.div`
   color: ${(props) => getStatusColor(props.status)};
 `;
 
-const defaultSignals = [
-  {
-    id: 1,
-    title: "Signal 1",
-    time: "14:00 - 14:30",
-    traded: false,
-    status: "not-started",
-    capitalUpdated: false,
-  },
-  {
-    id: 2,
-    title: "Signal 2",
-    time: "19:00 - 19:30",
-    traded: false,
-    status: "not-started",
-    capitalUpdated: false,
-  },
-];
-
 const SignalWidget = () => {
   const [signals, setSignals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchSignals();
-    // const intervalId = setInterval(updateSignalStatuses, 60000);
-    // return () => clearInterval(intervalId);
-  }, []);
-
   const fetchSignals = async () => {
     try {
       setLoading(true);
       const response = await getSignalForTheDay();
-      const fetchedSignal = response.signals.map((signal) => {
-        const defaultSignal = defaultSignals.find(
-          (ds) => ds.title === signal.title
-        );
+      const formattedSignals = response.signals.map((signal) => {
+        // Parse the datetime string properly
+        const [datePart, startTime, , endTime] = signal.time.split(" ");
         return {
+          ...signal,
           id: signal._id,
-          title: signal.title,
-          traded: signal.traded,
-          status: signal.status,
-          capitalUpdated: false,
-          time: defaultSignal ? defaultSignal.time : signal.time,
+          time: `${startTime} - ${endTime}`,
+          originalDate: datePart,
         };
       });
-      setSignals(fetchedSignal);
+      setSignals(formattedSignals);
     } catch (err) {
       setError("Failed to fetch signals");
       console.error(err);
@@ -139,54 +104,72 @@ const SignalWidget = () => {
     }
   };
 
+  // Fetch signals only once on mount
+  useEffect(() => {
+    fetchSignals();
+  }, []);
+
+  // Separate effect for status updates with proper dependencies
   useEffect(() => {
     const checkSignalStatus = () => {
-      const currentTime = new Date();
+      const now = DateTime.now();
+
       const updatedSignals = signals.map((signal) => {
-        const [startTime, endTime] = signal.time.split(" - ");
-        const [startHour, startMin] = startTime.split(":");
-        const [endHour, endMin] = endTime.split(":");
+        // Parse the time range
+        const [startTimeStr, endTimeStr] = signal.time.split(" - ");
 
-        const signalStart = new Date();
-        signalStart.setHours(parseInt(startHour), parseInt(startMin), 0);
-
-        const signalEnd = new Date();
-
-        signalEnd.setHours(parseInt(endHour), parseInt(endMin), 0);
+        // Create today's date with the signal times
+        const today = now.toFormat("yyyy-MM-dd");
+        const startTime = DateTime.fromFormat(
+          `${today} ${startTimeStr}`,
+          "yyyy-MM-dd HH:mm"
+        );
+        const endTime = DateTime.fromFormat(
+          `${today} ${endTimeStr}`,
+          "yyyy-MM-dd HH:mm"
+        );
 
         let newStatus = signal.status;
-        if (currentTime >= signalStart && currentTime <= signalEnd) {
-          newStatus = "in-progress";
-        } else if (currentTime >= signalEnd) {
-          newStatus = "completed";
-          console.log(signal);
 
-          // Here you would typically make an API call to update the traded status
-          updateCapitalForSignal(signal);
+        // Only update status if it's different from current
+        if (
+          now >= startTime &&
+          now < endTime &&
+          signal.status !== "in-progress"
+        ) {
+          newStatus = "in-progress";
+        } else if (now >= endTime && signal.status !== "completed") {
+          newStatus = "completed";
+          // Only update capital if the signal isn't traded and status is changing to completed
+          if (!signal.traded) {
+            updateCapitalForSignal(signal);
+          }
         }
 
-        return {
-          ...signal,
-          status: newStatus,
-        };
+        // Only return a new object if the status changed
+        return newStatus !== signal.status
+          ? { ...signal, status: newStatus }
+          : signal;
       });
 
-      setSignals(updatedSignals);
+      // Only update state if there were actual changes
+      if (JSON.stringify(updatedSignals) !== JSON.stringify(signals)) {
+        setSignals(updatedSignals);
+      }
     };
 
     const interval = setInterval(checkSignalStatus, 60000); // Check every minute
     checkSignalStatus(); // Initial check
 
     return () => clearInterval(interval);
-  }, []);
+  }, [signals]); // Include signals in dependencies
 
   const updateCapitalForSignal = async (signal) => {
     try {
-      if (!signal.traded && signal.status !== "completed")
-        await updateRecentCapital();
+      await updateRecentCapital();
       setSignals((prevSignals) =>
         prevSignals.map((s) =>
-          s.id === signal.id ? { ...s, capitalUpdated: true } : s
+          s.id === signal.id ? { ...s, traded: true } : s
         )
       );
     } catch (err) {
@@ -221,20 +204,18 @@ const SignalWidget = () => {
       <GlobalStyle />
       <Container>
         <WidgetGrid>
-          {signals.map((signal) => {
-            return (
-              <Card key={signal.id} status={signal.status}>
-                <CardHeader>{signal.title}</CardHeader>
-                <CardContent>
-                  <Time>{signal.time}</Time>
-                  <StatusGroup status={signal.status}>
-                    {getStatusIcon(signal.status)}
-                    {signal.status.replace("-", " ")}
-                  </StatusGroup>
-                </CardContent>
-              </Card>
-            );
-          })}
+          {signals.map((signal) => (
+            <Card key={signal.id} status={signal.status}>
+              <CardHeader>{signal.title}</CardHeader>
+              <CardContent>
+                <Time>{signal.time}</Time>
+                <StatusGroup status={signal.status}>
+                  {getStatusIcon(signal.status)}
+                  {signal.status.replace("-", " ")}
+                </StatusGroup>
+              </CardContent>
+            </Card>
+          ))}
         </WidgetGrid>
       </Container>
     </>

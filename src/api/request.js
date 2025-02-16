@@ -50,3 +50,12 @@ export const getSignalForTheDay = async () => {
     throw error.response.data;
   }
 };
+
+export const getStats = async () => {
+  try {
+    const response = await authSignal.get("/signal/stats");
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};

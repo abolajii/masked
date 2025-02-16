@@ -4,6 +4,7 @@ import SignalWidget from "../components/Signal";
 import styled from "styled-components";
 import { DollarSign, Eye, EyeOff, TrendingUp, Wallet } from "lucide-react";
 import DailySignals from "../components/DailySignals";
+import { getStats } from "../api/request";
 
 const WelcomeHeader = styled.h2`
   display: flex;
@@ -112,12 +113,26 @@ const Dashboard = () => {
   const { user } = useAuthStore();
   const [isHidden, setIsHidden] = useState(true);
   const [currency, setCurrency] = useState("USD");
+  const [stats, setStats] = useState(null);
 
   const toggleVisibility = () => setIsHidden(!isHidden);
 
   const hideValue = (value) => {
     return isHidden ? "••••••" : value;
   };
+
+  React.useEffect(() => {
+    const getSignalStats = async () => {
+      try {
+        const response = await getStats();
+        console.log(response);
+        setStats(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getSignalStats();
+  }, []);
 
   return (
     <div>
@@ -153,7 +168,7 @@ const Dashboard = () => {
           <StatInfo>
             <StatLabel>Total Profit</StatLabel>
             <StatValue>
-              {hideValue(formatValue(user.total_profit || 0, currency))}
+              {hideValue(formatValue(stats?.total_profit || 0, currency))}
             </StatValue>
           </StatInfo>
         </StatCard>
@@ -165,7 +180,7 @@ const Dashboard = () => {
           <StatInfo>
             <StatLabel>Average Profit</StatLabel>
             <StatValue>
-              {hideValue(formatValue(user.average_profit || 0, currency))}
+              {hideValue(formatValue(stats?.average_profit || 0, currency))}
             </StatValue>
           </StatInfo>
         </StatCard>

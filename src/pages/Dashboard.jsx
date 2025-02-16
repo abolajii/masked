@@ -97,7 +97,7 @@ const VisibilityButton = styled.button`
   }
 `;
 
-const formatValue = (value, currency, nairaRate = 1656) => {
+const formatValue = (value, currency, nairaRate = 1700) => {
   const options = {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,

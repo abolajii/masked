@@ -16,6 +16,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Deposit from "./pages/Deposit";
 import useAuthStore from "./store/authStore";
+import Trade from "./pages/Trade";
 
 const App = () => {
   const { setUser } = useAuthStore();
@@ -86,6 +87,17 @@ const App = () => {
             <ProtectedRoute>
               <MainLayout>
                 <Deposit />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/trade"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <Trade />
               </MainLayout>
             </ProtectedRoute>
           }

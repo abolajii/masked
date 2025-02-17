@@ -9,6 +9,7 @@ import {
   HelpCircle,
   LogOut,
   User,
+  ChartCandlestick,
 } from "lucide-react";
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -35,6 +36,7 @@ const Sidebar = styled.aside`
     width: 64px;
     background-color: #1a1a1a;
     padding: 1.5rem 0;
+    border-right: 1px solid #ff99005e;
   }
 `;
 
@@ -156,6 +158,7 @@ const MainLayout = ({ children }) => {
     { Icon: Home, label: "Dashboard", path: "/dashboard" },
     { Icon: Calendar, label: "Calendar", path: "/weekly" },
     { Icon: DollarSign, label: "Deposit", path: "/deposit" },
+    { Icon: ChartCandlestick, label: "Trade", path: "/trade" },
     { Icon: User, label: "Profile", path: "/profile" },
     // { Icon: HelpCircle, label: "Help", path: "/help" },
   ];

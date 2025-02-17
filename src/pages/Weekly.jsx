@@ -33,8 +33,8 @@ const Header = styled.div`
   }
 `;
 
-const Title = styled.h1`
-  font-size: 1.5rem;
+const Title = styled.h2`
+  font-size: 1rem;
   color: white;
   font-weight: bold;
 

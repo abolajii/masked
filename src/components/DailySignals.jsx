@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import useAuthStore from "../store/authStore";
-import { Check, Clock } from "lucide-react";
+import { Check, Clock, Hourglass } from "lucide-react";
 
 const Container = styled.div`
   background: #1a1b1e;

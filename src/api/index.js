@@ -67,7 +67,7 @@ authSignal.interceptors.response.use(
       try {
         // Get current user data
         const getMeResponse = await getMe();
-
+        console.log(getMeResponse);
         if (getMeResponse.success) {
           // If successful, update user state (assuming setUser is available in context)
           if (typeof setUser === "function") {

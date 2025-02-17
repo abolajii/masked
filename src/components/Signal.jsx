@@ -3,6 +3,9 @@ import styled, { createGlobalStyle } from "styled-components";
 import { DateTime } from "luxon";
 import { Check, Clock, Hourglass } from "lucide-react";
 import { getSignalForTheDay, updateRecentCapital } from "../api/request";
+import Notification from "./Notification";
+import { calculateProfit } from "../utils";
+import useAuthStore from "../store/authStore";
 
 // Global styles for dark mode
 const GlobalStyle = createGlobalStyle`
@@ -27,12 +30,13 @@ const getStatusColor = (status) => {
 
 // Styled components remain the same...
 const Container = styled.div`
-  margin-bottom: 10p;
+  margin-bottom: 15px;
 `;
 const LoadingContainer = styled.div`
   color: #f59f00;
   font-size: 0.9rem;
   font-weight: 500;
+  margin-bottom: 15px;
 `;
 const ErrorContainer = styled.div`
   color: #ef4444;
@@ -84,6 +88,7 @@ const SignalWidget = () => {
   const [signals, setSignals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuthStore();
 
   const fetchSignals = async () => {
     try {
@@ -203,10 +208,15 @@ const SignalWidget = () => {
     return <ErrorContainer>{error}</ErrorContainer>;
   }
 
+  const profit = calculateProfit(user.running_capital).profitFromTrade.toFixed(
+    2
+  );
+
   return (
     <>
       <GlobalStyle />
       <Container>
+        <Notification profit={profit} />
         <WidgetGrid>
           {signals.map((signal) => (
             <Card key={signal.id} status={signal.status}>

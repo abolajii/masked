@@ -355,8 +355,22 @@ const generateWeeklyDetails = (
   return weeklyDetails;
 };
 
-export {
-  calculateProfit,
-  generateWeeklyDetails,
-  // calculateDayProfits,
+const calculateDaysLeft = (targetDate) => {
+  const today = new Date();
+  const target = new Date(targetDate);
+
+  // Reset time part to ensure we're only comparing dates
+  today.setHours(0, 0, 0, 0);
+  target.setHours(0, 0, 0, 0);
+
+  // Calculate the difference in milliseconds
+  const differenceMs = target.getTime() - today.getTime();
+
+  // Convert to days
+  const daysLeft = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
+
+  // Return 0 if date has passed
+  return Math.max(0, daysLeft);
 };
+
+export { calculateProfit, generateWeeklyDetails, calculateDaysLeft };

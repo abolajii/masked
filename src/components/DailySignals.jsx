@@ -147,7 +147,7 @@ const generateWeeklyData = (weeklyCapital, lastDayDate = null) => {
       } else if (currentHour < 14) {
         // Between first and second signal
         status = "awaiting-signal";
-      } else if (currentHour < 18) {
+      } else if (currentHour < 20) {
         // During second signal
         status = "in-progress";
       } else {

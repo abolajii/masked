@@ -1,12 +1,18 @@
 import {
   ArrowRightLeft,
+  Briefcase,
   Calendar,
+  Calendar1,
+  Clock,
   DollarSign,
   Eye,
   EyeOff,
+  Users,
 } from "lucide-react";
 import React, { useState } from "react";
 import styled from "styled-components";
+import { calculateDaysLeft } from "../utils";
+import SetupTrade from "./SetupTrade";
 
 const Container = styled.div`
   width: 100%;
@@ -36,7 +42,7 @@ const CapitalDisplay = styled.div`
 `;
 
 const CapitalIcon = styled.div`
-  color: #4dc5b9;
+  color: #ff9800;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,7 +65,7 @@ const CapitalValue = styled.div`
 `;
 
 const CurrencyIcon = styled.div`
-  color: #4dc5b9;
+  color: #ff9800;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -215,7 +221,7 @@ const ToggleSwitch = styled.div`
     top: 4px;
     width: 72px;
     height: 32px;
-    background: #3a8179;
+    background: #ff9800;
     border-radius: 16px;
     transition: all 0.3s ease;
   }
@@ -231,6 +237,53 @@ const CurrencyOption = styled.span`
   font-weight: ${(props) => (props.active ? "600" : "400")};
   transition: all 0.3s ease;
 `;
+
+const CountdownGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+  background: #1e1e1e;
+  border-radius: 8px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+`;
+
+const CountdownCard = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #2d2d2d;
+  border-radius: 8px;
+`;
+
+const CountdownIcon = styled.div`
+  color: #ff9800;
+`;
+
+const CountdownInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const CountdownLabel = styled.div`
+  font-size: 0.875rem;
+  color: #9ca3af;
+`;
+
+const CountdownValue = styled.div`
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #fff;
+`;
+
 const Trade = () => {
   const NGN_TO_USD = 1700;
   const [startDate, setStartDate] = useState("");
@@ -278,17 +331,19 @@ const Trade = () => {
 
   return (
     <Container>
-      <Header>
+      <SetupTrade />
+      {/* 1 */}
+      {/* <Header>
         <h2>Signal Profit Calculator</h2>
-        {/* Add navigation links here */}
         <ToggleButton onClick={() => setShowNumbers(!showNumbers)}>
           <IconWrapper>
             {showNumbers ? <EyeOff size={16} /> : <Eye size={16} />}
           </IconWrapper>
           <ButtonText>{showNumbers ? "Hide Value" : "Show Value"}</ButtonText>
         </ToggleButton>
-      </Header>
-      <InputGroup>
+      </Header> */}
+      {/* 2 */}
+      {/* <InputGroup>
         <FormGroup>
           <Label>Capital Amount ({isNaira ? "NGN" : "USD"})</Label>
           <Input
@@ -316,8 +371,9 @@ const Trade = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </FormGroup>
-      </InputGroup>
-      <CurrencySection>
+      </InputGroup> */}
+      {/* 3 */}
+      {/* <CurrencySection>
         <CapitalDisplay>
           <CapitalIcon>
             <DollarSign size={24} />
@@ -325,7 +381,6 @@ const Trade = () => {
           <CapitalInfo>
             <CapitalLabel>Starting Capital</CapitalLabel>
             <CapitalValue>
-              {/* showNumbers show else mask */}
               {maskNumber(formatCurrency(parseFloat(capital), isNaira))}
             </CapitalValue>
           </CapitalInfo>
@@ -373,7 +428,60 @@ const Trade = () => {
             </ToggleLabel>
           </div>
         </StyledToggleContainer>
-      </CurrencySection>
+      </CurrencySection> */}
+
+      {/* 4 */}
+      {/* 
+      <CountdownGrid>
+        <CountdownCard>
+          <CountdownIcon>
+            <Clock size={24} />
+          </CountdownIcon>
+          <CountdownInfo>
+            <CountdownLabel>Days Until Birthday</CountdownLabel>
+            <CountdownValue>
+              {maskNumber(calculateDaysLeft("2025-08-26"))}
+            </CountdownValue>
+          </CountdownInfo>
+        </CountdownCard>
+        <CountdownCard>
+          <CountdownIcon>
+            <Clock size={24} />
+          </CountdownIcon>
+          <CountdownInfo>
+            <CountdownLabel>Days Until Resignation</CountdownLabel>
+            <CountdownValue>{maskNumber(20)}</CountdownValue>
+          </CountdownInfo>
+        </CountdownCard>
+        <CountdownCard>
+          <CountdownIcon>
+            <Briefcase size={24} />
+          </CountdownIcon>
+          <CountdownInfo>
+            <CountdownLabel>Working Days Left</CountdownLabel>
+            <CountdownValue>{maskNumber(190)}</CountdownValue>
+          </CountdownInfo>
+        </CountdownCard>
+        <CountdownCard>
+          <CountdownIcon>
+            <Calendar1 size={24} />
+          </CountdownIcon>
+          <CountdownInfo>
+            <CountdownLabel>Resignation Date</CountdownLabel>
+            <CountdownValue></CountdownValue>
+          </CountdownInfo>
+        </CountdownCard>
+
+        <CountdownCard>
+          <CountdownIcon>
+            <Users size={24} />
+          </CountdownIcon>
+          <CountdownInfo>
+            <CountdownLabel>Leave Days Remaining</CountdownLabel>
+            <CountdownValue>{maskNumber(0)}</CountdownValue>
+          </CountdownInfo>
+        </CountdownCard>
+      </CountdownGrid> */}
     </Container>
   );
 };

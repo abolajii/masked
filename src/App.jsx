@@ -34,6 +34,8 @@ const App = () => {
         // console.log(response.user);
         setUser(response.user);
       } else {
+        // console.log(error);
+        window.href = "/login";
         // Clear the auth state
         // This should be done in a Redux store or similar
         // for better state management

@@ -173,7 +173,14 @@ const Dashboard = () => {
         console.log(response);
         setStats(response);
       } catch (error) {
-        console.error(error);
+        if (error.error === "Invalid token") {
+          // console.log(error.error);
+          // Handle token expiration or invalid token
+          // For now, just log out and redirect to login page
+          localStorage.removeItem("token");
+          window.href = "/login";
+          // return;
+        }
       }
     };
     getSignalStats();

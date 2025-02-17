@@ -233,13 +233,13 @@ const StatusBadge = styled.span`
       case "pending":
         return "#374151";
       case "not-started":
-        return "#FEE2E2";
+        return "#f7caca";
       case "in-progress":
         return "#DBEAFE";
       case "awaiting-next-signal":
         return "#FEF3C7";
-      case "done":
-        return "#91b8a4";
+      case "completed":
+        return "#6fb491";
       default:
         return "#374151";
     }
@@ -249,12 +249,12 @@ const StatusBadge = styled.span`
       case "pending":
         return "#9CA3AF";
       case "not-started":
-        return "#DC2626";
+        return "#bb2e2e";
       case "in-progress":
         return "#2563EB";
       case "awaiting-next-signal":
         return "#D97706";
-      case "done":
+      case "completed":
         return "#083426";
       default:
         return "#9CA3AF";
@@ -381,7 +381,7 @@ const getStatusIcon = (status) => {
       return <Hourglass size={16} />;
     case "awaiting-next-signal":
       return <Clock size={16} />;
-    case "done":
+    case "completed":
       return <Check size={16} />;
     case "pending":
       return <Clock size={16} />;

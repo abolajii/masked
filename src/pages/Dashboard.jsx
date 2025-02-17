@@ -198,14 +198,8 @@ const Dashboard = () => {
           )}
         </VisibilityButton>
       </WelcomeHeader>
-      <Flex>
-        <SignalWidget loading={loading} setLoading={setLoading} />
-        {!loading && (
-          <Button onClick={toggleCurrency}>
-            Switch to {currency === "USD" ? "₦" : "$"}
-          </Button>
-        )}
-      </Flex>
+      <SignalWidget loading={loading} setLoading={setLoading} />
+
       <StatsGrid>
         <StatCard>
           <StatIcon color="#4c6ef5">

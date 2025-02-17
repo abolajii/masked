@@ -27,7 +27,7 @@ const getStatusColor = (status) => {
 
 // Styled components remain the same...
 const Container = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 10p;
 `;
 const LoadingContainer = styled.div`
   color: #f59f00;
@@ -41,20 +41,20 @@ const ErrorContainer = styled.div`
   font-weight: 500;
 `;
 const WidgetGrid = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
-  /* grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem; */
+  margin-bottom: 10px;
 `;
 const Card = styled.div`
   background: #25262b;
+
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   overflow: hidden;
   border-left: 5px solid ${(props) => getStatusColor(props.status)};
   padding: 1rem;
-  width: 300px;
 `;
 const CardHeader = styled.div`
   font-size: 1rem;
@@ -80,8 +80,9 @@ const StatusGroup = styled.div`
   color: ${(props) => getStatusColor(props.status)};
 `;
 
-const SignalWidget = ({ loading, setLoading }) => {
+const SignalWidget = () => {
   const [signals, setSignals] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchSignals = async () => {

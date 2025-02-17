@@ -141,12 +141,12 @@ const generateWeeklyData = (weeklyCapital, lastDayDate = null) => {
     } else if (i === currentDay) {
       // here if today
       // For current day, determine status based on signals
-      if (currentHour < 10) {
+      if (currentHour < 13) {
         // Before first signal
         status = "not-started";
       } else if (currentHour < 14) {
         // Between first and second signal
-        status = "awaiting-next-signal";
+        status = "awaiting-signal";
       } else if (currentHour < 18) {
         // During second signal
         status = "in-progress";
@@ -236,7 +236,7 @@ const StatusBadge = styled.span`
         return "#f7caca";
       case "in-progress":
         return "#DBEAFE";
-      case "awaiting-next-signal":
+      case "awaiting-signal":
         return "#FEF3C7";
       case "completed":
         return "#6fb491";
@@ -252,7 +252,7 @@ const StatusBadge = styled.span`
         return "#bb2e2e";
       case "in-progress":
         return "#2563EB";
-      case "awaiting-next-signal":
+      case "awaiting-signal":
         return "#D97706";
       case "completed":
         return "#083426";
@@ -379,7 +379,7 @@ const getStatusIcon = (status) => {
       return <Clock size={16} />;
     case "in-progress":
       return <Hourglass size={16} />;
-    case "awaiting-next-signal":
+    case "awaiting-signal":
       return <Clock size={16} />;
     case "completed":
       return <Check size={16} />;

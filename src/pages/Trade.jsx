@@ -285,7 +285,7 @@ const CountdownValue = styled.div`
 `;
 
 const Trade = () => {
-  const NGN_TO_USD = 1700;
+  const NGN_TO_USD = 1800;
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [showNumbers, setShowNumbers] = useState(false);

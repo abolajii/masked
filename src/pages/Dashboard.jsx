@@ -136,7 +136,7 @@ const Flex = styled.div`
   margin-bottom: 1rem;
 `;
 
-const formatValue = (value, currency, nairaRate = 1700) => {
+const formatValue = (value, currency, nairaRate = 1800) => {
   const options = {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -154,7 +154,7 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // const NAIRA_RATE = 1700;
+  // const NAIRA_RATE = 1800;
 
   const toggleVisibility = () => setIsHidden(!isHidden);
 

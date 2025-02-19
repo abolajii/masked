@@ -14,6 +14,8 @@ import {
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
+import { PiHandWithdrawBold } from "react-icons/pi";
+
 const LayoutWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -158,9 +160,9 @@ const MainLayout = ({ children }) => {
     { Icon: Home, label: "Dashboard", path: "/dashboard" },
     { Icon: Calendar, label: "Calendar", path: "/weekly" },
     { Icon: DollarSign, label: "Deposit", path: "/deposit" },
+    { Icon: PiHandWithdrawBold, label: "Withdraw", path: "/withdraw" },
     { Icon: ChartCandlestick, label: "Trade", path: "/trade" },
     { Icon: User, label: "Profile", path: "/profile" },
-    // { Icon: HelpCircle, label: "Help", path: "/help" },
   ];
 
   return (

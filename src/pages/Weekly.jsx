@@ -230,7 +230,7 @@ const Weekly = () => {
   const [startingCapital, setStartingCapital] = useState(user.weekly_capital);
   const [weeklyDetailsHistory, setWeeklyDetailsHistory] = useState([]);
   const [currency, setCurrency] = useState("USD");
-  const NAIRA_RATE = 1700;
+  const NAIRA_RATE = 1800;
 
   const [deposits, setDeposits] = useState([]);
 

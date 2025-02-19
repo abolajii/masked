@@ -210,7 +210,7 @@ const ToggleContainer = styled.div`
 `;
 
 const formatCurrency = (amount, currency = "USD") => {
-  const NAIRA_RATE = 1700;
+  const NAIRA_RATE = 1800;
 
   if (currency === "NGN") {
     amount = amount * NAIRA_RATE;
@@ -273,7 +273,7 @@ const DailySignals = () => {
   };
 
   const formatCurrency = (amount, currency = "USD") => {
-    const NAIRA_RATE = 1700;
+    const NAIRA_RATE = 1800;
 
     if (currency === "NGN") {
       amount = amount * NAIRA_RATE;

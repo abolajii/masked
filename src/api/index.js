@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const prod = !true;
+const prod = true;
 
 const BASE_URL = prod
   ? "https://masked-be.vercel.app/api/v1"

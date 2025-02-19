@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import useAuthStore from "../store/authStore";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import MonthlyDetails from "./MonthlyDetails";
 
 const lightTheme = {
   primary: "#3B82F6",
@@ -40,8 +41,9 @@ const Container = styled.div`
   display: flex;
   gap: 20px;
   .inner {
-    flex: 1;
-    padding: 2rem;
+    width: 400px;
+    /* flex: 1; */
+    /* padding: 2rem; */
   }
 `;
 
@@ -356,7 +358,7 @@ const Withdraw = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle>Make a Withdrawal</CardTitle>
             </CardHeader>
@@ -387,7 +389,7 @@ const Withdraw = () => {
 
               <Button onClick={handleWithdraw}>Withdraw</Button>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
         <div className="inner">
           <Card>
@@ -445,6 +447,7 @@ const Withdraw = () => {
         </div>
         {/*  */}
       </Container>
+      <MonthlyDetails initialCapital={user.running_capital} />
     </ThemeProvider>
   );
 };
